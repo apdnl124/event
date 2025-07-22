@@ -1,0 +1,34 @@
+{
+    "Name": "VideoAnalysisRule",
+    "Description": "동영상 변환 완료 후 분석 Lambda 함수들을 트리거하는 EventBridge 규칙",
+    "EventPattern": {
+        "source": ["custom.video-pipeline"],
+        "detail-type": ["Video Analysis Required"],
+        "detail": {
+            "analysis_types": {
+                "exists": true
+            },
+            "converted_files": {
+                "exists": true
+            }
+        }
+    },
+    "State": "ENABLED",
+    "Targets": [
+        {
+            "Id": "RekognitionAnalysisTarget",
+            "Arn": "arn:aws:lambda:ap-northeast-2:YOUR_ACCOUNT_ID:function:rekognition-analysis-lambda",
+            "RoleArn": "arn:aws:iam::YOUR_ACCOUNT_ID:role/EventBridgeExecutionRole"
+        },
+        {
+            "Id": "TwelveLabsAnalysisTarget", 
+            "Arn": "arn:aws:lambda:ap-northeast-2:YOUR_ACCOUNT_ID:function:twelvelabs-analysis-lambda",
+            "RoleArn": "arn:aws:iam::YOUR_ACCOUNT_ID:role/EventBridgeExecutionRole"
+        },
+        {
+            "Id": "TranscribeAnalysisTarget",
+            "Arn": "arn:aws:lambda:ap-northeast-2:YOUR_ACCOUNT_ID:function:transcribe-analysis-lambda", 
+            "RoleArn": "arn:aws:iam::YOUR_ACCOUNT_ID:role/EventBridgeExecutionRole"
+        }
+    ]
+}
