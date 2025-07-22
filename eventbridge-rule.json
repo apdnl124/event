@@ -1,0 +1,40 @@
+{
+    "Name": "S3VideoUploadRule",
+    "Description": "S3에 동영상 파일이 업로드되면 Lambda 함수를 트리거하는 EventBridge 규칙",
+    "EventPattern": {
+        "source": ["aws.s3"],
+        "detail-type": ["Object Created"],
+        "detail": {
+            "bucket": {
+                "name": ["your-input-video-bucket"]
+            },
+            "object": {
+                "key": [{
+                    "suffix": ".mp4"
+                }, {
+                    "suffix": ".mov"
+                }, {
+                    "suffix": ".avi"
+                }, {
+                    "suffix": ".mkv"
+                }, {
+                    "suffix": ".wmv"
+                }, {
+                    "suffix": ".flv"
+                }, {
+                    "suffix": ".webm"
+                }, {
+                    "suffix": ".m4v"
+                }]
+            }
+        }
+    },
+    "State": "ENABLED",
+    "Targets": [
+        {
+            "Id": "VideoConversionLambda",
+            "Arn": "arn:aws:lambda:ap-northeast-2:YOUR_ACCOUNT_ID:function:video-conversion-lambda",
+            "RoleArn": "arn:aws:iam::YOUR_ACCOUNT_ID:role/EventBridgeExecutionRole"
+        }
+    ]
+}
